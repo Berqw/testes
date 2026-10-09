@@ -1,0 +1,54 @@
+def car(ox, oy, s=1.0, body="#1c3b7a"):
+    def P(x, y):
+        return (ox + x * s, oy + y * s)
+
+    def cpoly(pts, color):
+        poly([P(*p) for p in pts], color)
+
+    def cline(a, b, color, w=1):
+        line(*P(*a), *P(*b), color, w * s)
+
+    def ccircle(x, y, r, color):
+        circle(*P(x, y), r * s, color)
+
+    def wheel(cx, cy):
+        ccircle(cx, cy, 21, "black")        # арка
+        ccircle(cx, cy, 19, "#111111")      # шина
+        ccircle(cx, cy, 13, "silver")       # обод
+        ccircle(cx, cy, 10, "#333333")
+        ccircle(cx, cy, 6, "firebrick")     # тормозной суппорт
+        for a in range(0, 360, 72):         # спицы
+            cline((cx, cy),
+                  (cx + 11 * math.cos(math.radians(a + 18)),
+                   cy + 11 * math.sin(math.radians(a + 18))),
+                  "silver", 3.5)
+        ccircle(cx, cy, 4, "silver")
+        ccircle(cx, cy, 1.5, "gold")
+
+    # тень
+    cpoly([(-8, -3), (275, -3), (275, 1), (-8, 1)], "darkgreen")
+
+    # кузов
+    cpoly([(2, 14), (0, 36), (7, 48), (66, 52), (97, 72), (160, 74),
+           (192, 52), (236, 46), (256, 40), (264, 28), (262, 14)], body)
+
+    # стёкла (тонировка) и блик
+    cpoly([(72, 54), (98, 69), (158, 71), (186, 54)], "#26323f")
+    cline((108, 68), (124, 56), "#4a5f78", 3)
+    cline((140, 69), (152, 57), "#4a5f78", 3)
+    cline((128, 54), (128, 71), body, 5)    # стойка B
+
+    # линии дверей, ручки, молдинг
+    for x in (72, 128, 186):
+        cline((x, 52), (x, 18), "#0a1633", 1.2)
+    cpoly([(105, 46), (119, 46), (119, 43), (105, 43)], "silver")
+    cpoly([(150, 46), (164, 46), (164, 43), (150, 43)], "silver")
+    cline((8, 38), (255, 33), "#13285a", 1.5)
+
+    # зеркало
+    cpoly([(184, 56), (198, 54), (197, 60), (186, 61)], body)
+
+    # фары
+    cpoly([(236, 46), (256, 40), (260, 32), (242, 34)], "lightyellow")
+    cpoly([(244, 42), (255, 38), (257, 34), (246, 36)], "gold")
+    cpoly([(0, 36
